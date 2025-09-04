@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-public class DriveTrainR extends LinearOpMode {
+public class RobotCentric extends LinearOpMode {
 
     private DcMotor RMF, RMB, LMF, LMB;
     private double speed = 0.75;

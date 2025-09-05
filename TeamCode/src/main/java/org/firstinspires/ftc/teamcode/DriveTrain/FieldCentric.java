@@ -2,12 +2,14 @@ package org.firstinspires.ftc.teamcode.DriveTrain;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
+@TeleOp
 public class FieldCentric extends LinearOpMode {
 
     private DcMotor RMF, RMB, LMF, LMB;
@@ -18,21 +20,15 @@ public class FieldCentric extends LinearOpMode {
     public void runOpMode(){
         initHardware();
 
-        RMF.setDirection(DcMotorSimple.Direction.REVERSE);
-        RMB.setDirection(DcMotorSimple.Direction.REVERSE);
-        LMF.setDirection(DcMotorSimple.Direction.FORWARD);
-        LMB.setDirection(DcMotorSimple.Direction.FORWARD);
+        RMF.setDirection(DcMotorSimple.Direction.FORWARD);
+        RMB.setDirection(DcMotorSimple.Direction.FORWARD);
+        LMF.setDirection(DcMotorSimple.Direction.REVERSE);
+        LMB.setDirection(DcMotorSimple.Direction.REVERSE);
 
         waitForStart();
         while (opModeIsActive()) {
-            imu();
             drive();
 
-            if (gamepad1.options) {
-                imu.resetYaw();
-            }
-
-            telemetry.addData("IMU", imu.getRobotYawPitchRollAngles());
             telemetry.update();
         }
 
@@ -48,23 +44,24 @@ public class FieldCentric extends LinearOpMode {
 
     }
 
-    public void imu() {
+    public void drive() {
 
         RevHubOrientationOnRobot RobotOrientaion = new RevHubOrientationOnRobot(
-          RevHubOrientationOnRobot.LogoFacingDirection.DOWN,
-          RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD
+                RevHubOrientationOnRobot.LogoFacingDirection.DOWN,
+                RevHubOrientationOnRobot.UsbFacingDirection.FORWARD
         );
 
         imu.initialize(new IMU.Parameters(RobotOrientaion));
 
-    }
+        double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
 
-    public void drive() {
+        if (gamepad1.dpad_up) {
+            imu.resetYaw();
+        }
+
         double drive = - gamepad1.left_stick_y;
         double strafe = gamepad1.left_stick_x;
         double turn = gamepad1.right_stick_x;
-
-        double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
 
         double driveY = strafe * Math.sin(-botHeading) + drive * Math.cos(-botHeading);
         double strafeX = strafe * Math.cos(-botHeading) - drive * Math.sin(-botHeading);
@@ -86,10 +83,12 @@ public class FieldCentric extends LinearOpMode {
         LMF.setPower(powerLMF * speed);
         LMB.setPower(powerLMB * speed);
 
+
+        telemetry.addData("IMU", imu.getRobotYawPitchRollAngles());
     }
 
     private double apllyDeadzone(double value) {
-        return Math.abs(value) > 0.05 ? 0 : value;
+        return Math.abs(value) > 0.05 ? value : 0;
     }
 
 }

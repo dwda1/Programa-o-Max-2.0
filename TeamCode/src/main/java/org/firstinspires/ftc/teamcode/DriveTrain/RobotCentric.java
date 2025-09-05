@@ -1,9 +1,11 @@
 package org.firstinspires.ftc.teamcode.DriveTrain;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+@TeleOp
 public class RobotCentric extends LinearOpMode {
 
     private DcMotor RMF, RMB, LMF, LMB;
@@ -13,15 +15,20 @@ public class RobotCentric extends LinearOpMode {
     public void runOpMode() {
         initHardware();
 
-        RMF.setDirection(DcMotorSimple.Direction.REVERSE);
-        RMB.setDirection(DcMotorSimple.Direction.REVERSE);
-        LMF.setDirection(DcMotorSimple.Direction.FORWARD);
-        LMB.setDirection(DcMotorSimple.Direction.FORWARD);
+        RMF.setDirection(DcMotorSimple.Direction.FORWARD);
+        RMB.setDirection(DcMotorSimple.Direction.FORWARD);
+        LMF.setDirection(DcMotorSimple.Direction.REVERSE);
+        LMB.setDirection(DcMotorSimple.Direction.REVERSE);
 
         waitForStart();
         while (opModeIsActive()) {
             drive();
 
+            telemetry.addData("power RMF", RMF.getPower());
+            telemetry.addData("power RMB", RMB.getPower());
+            telemetry.addData("power LMF", LMF.getPower());
+            telemetry.addData("power LMB", LMB.getPower());
+            telemetry.update();
         }
 
     }
@@ -58,7 +65,7 @@ public class RobotCentric extends LinearOpMode {
     }
 
     private double apllyDeadzone(double value) {
-       return Math.abs(value) > 0.05 ? 0 : value;
+       return Math.abs(value) > 0.05 ? value : 0;
     }
 
 }

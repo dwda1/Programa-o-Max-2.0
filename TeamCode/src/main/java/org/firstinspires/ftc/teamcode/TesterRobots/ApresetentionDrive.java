@@ -40,6 +40,7 @@ public class ApresetentionDrive extends LinearOpMode {
         RMB = hardwareMap.get(DcMotor.class, "RMB");
         LMF = hardwareMap.get(DcMotor.class, "LMF");
         LMB = hardwareMap.get(DcMotor.class, "LMB");
+
         Arm = hardwareMap.get(DcMotor.class, "Arm");
 
     }
@@ -70,7 +71,9 @@ public class ApresetentionDrive extends LinearOpMode {
     private void Arm1() {
 
         if (gamepad1.right_bumper) {
-            Arm.setPower(1);
+            Arm.setPower(0.7);
+        } else if (gamepad1.left_bumper) {
+            Arm.setPower(-0.7);
         } else {
             Arm.setPower(0);
         }

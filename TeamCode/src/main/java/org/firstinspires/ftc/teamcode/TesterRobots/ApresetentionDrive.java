@@ -71,9 +71,11 @@ public class ApresetentionDrive extends LinearOpMode {
     private void Arm1() {
 
         if (gamepad1.right_bumper) {
-            Arm.setPower(0.7);
+            Arm.setDirection(DcMotorSimple.Direction.FORWARD);
+            Arm.setPower(0.3);
         } else if (gamepad1.left_bumper) {
-            Arm.setPower(-0.7);
+            Arm.setDirection(DcMotorSimple.Direction.REVERSE);
+            Arm.setPower(0.3);
         } else {
             Arm.setPower(0);
         }
